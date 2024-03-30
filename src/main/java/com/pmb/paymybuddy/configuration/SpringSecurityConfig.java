@@ -27,7 +27,7 @@ public class SpringSecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider(){
+    public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setPasswordEncoder(passwordEncoder());
         authProvider.setUserDetailsService(userDetailsService);
@@ -55,7 +55,8 @@ public class SpringSecurityConfig {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                );
+                )
+                .rememberMe(Customizer.withDefaults());
         return http.build();
     }
     // TODO : regarder pour faire un remember me via la session
