@@ -1,11 +1,17 @@
 package com.pmb.paymybuddy.service;
 
+import com.pmb.paymybuddy.model.CompteBancaire;
+import com.pmb.paymybuddy.model.User;
 import com.pmb.paymybuddy.model.ComptePMB;
 import com.pmb.paymybuddy.model.User;
+import com.pmb.paymybuddy.repository.ComptePMBRepository;
 import com.pmb.paymybuddy.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,23 +19,44 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final ComptePMBRepository comptePMBRepository;
+    private PasswordEncoder passwordEncoder;
 
     public List<User> getUsers(){
         return userRepository.findAll();
     }
 
     public User getUserById(Integer id){
-        Optional<User> optionalUser = userRepository.findById(id);
-        return optionalUser.orElse(null);
+        Optional<User> user = userRepository.findById(id);
+        return user.orElse(null);
     }
 
-    public User addUser(User user){
+    public User getUserByEmail(String email){
+        User user = userRepository.findByEmail(email);
+        return user;
+    }
+
+    private boolean emailExists(String email) {
+        return getUserByEmail(email) != null;
+    }
+
+    public User addUser(User user) throws Exception {
+        if (emailExists(user.getEmail())){
+            throw new Exception("There is already a user with this email");
+        }
+
         ComptePMB comptePMB = new ComptePMB();
+        comptePMBRepository.save(comptePMB);
 
-        // TODO : lorsqu'il y aura le mot de passe, penser à l'encoder ici
-        user.setCompte_pmb(comptePMB);
+        User newUser = new User();
+        newUser.setNom(user.getNom());
+        newUser.setPrenom(user.getPrenom());
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        newUser.setCompte_pmb(comptePMB);
+        // TODO : mettre en rôle USER par défaut??
 
-        return saveUser(user);
+        return saveUser(newUser);
     }
 
     public User saveUser(User user){
@@ -42,4 +69,5 @@ public class UserService {
             userRepository.deleteById(id);
         }
     }
+
 }

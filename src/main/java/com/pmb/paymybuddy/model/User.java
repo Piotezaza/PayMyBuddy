@@ -19,11 +19,19 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
 
-    @Column(name = "prenom")
+    @Column(name = "prenom", nullable = false)
     private String prenom;
+
+    @Column(name = "nom", nullable = false)
+    private String nom;
+
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "mot_de_passe" , nullable = false)
+    private String password;
 
     @OneToOne(
             cascade = CascadeType.ALL,
@@ -50,16 +58,19 @@ public class User {
     )
     @JoinTable(
             name = "contact",
-            joinColumns = @JoinColumn(name = "utilisateur"),
+            joinColumns = @JoinColumn(name = "user"),
             inverseJoinColumns = @JoinColumn(name = "contact")
     )
     private List<User> contacts = new ArrayList<>();
 
+    // TODO faire une table ROLES
+
     @Override
     public String toString() {
-        return "Utilisateur {" +
+        return "User{" +
                 "id=" + id +
                 ", prenom='" + prenom + '\'' +
+                ", email='" + email + '\'' +
                 ", compte PMB nº" + compte_pmb.getId() +
                 ", compte bancaire: IBAN = " + (compte_bancaire == null ? "compte bancaire non défini" : compte_bancaire.getIban()) +
                 ", contacts=" + contacts +
