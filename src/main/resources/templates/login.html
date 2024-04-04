@@ -23,6 +23,11 @@
                 <span>Account successfully created!</span>
             </div>
         </div>
+        <div th:if="${param.logout}">
+            <div class="alert alert-info" role="alert">
+                <span>Logout successful.</span>
+            </div>
+        </div>
         <form th:action="@{/login}" method="post">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="username"><i class="bi bi-envelope"></i></span>

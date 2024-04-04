@@ -19,7 +19,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final ComptePMBRepository comptePMBRepository;
+    private final ComptePMBService comptePMBService;
     private PasswordEncoder passwordEncoder;
 
     public List<User> getUsers(){
@@ -40,23 +40,21 @@ public class UserService {
         return getUserByEmail(email) != null;
     }
 
-    public User addUser(User user) throws Exception {
+    public void addUser(User user) throws Exception {
         if (emailExists(user.getEmail())){
             throw new Exception("There is already a user with this email");
         }
 
         ComptePMB comptePMB = new ComptePMB();
-        comptePMBRepository.save(comptePMB);
+        ComptePMB createdComptePMB = comptePMBService.saveComptePMB(comptePMB);
 
         User newUser = new User();
         newUser.setNom(user.getNom());
         newUser.setPrenom(user.getPrenom());
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        newUser.setCompte_pmb(comptePMB);
-        // TODO : mettre en rôle USER par défaut??
-
-        return saveUser(newUser);
+        newUser.setComptePMB(createdComptePMB);
+        saveUser(newUser);
     }
 
     public User saveUser(User user){

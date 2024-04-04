@@ -1,10 +1,7 @@
 package com.pmb.paymybuddy.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@ToString
 @Table(name = "Compte_PMB")
 public class ComptePMB {
 
@@ -44,14 +42,4 @@ public class ComptePMB {
     )
     @JoinColumn(name = "id_compte_PMB")
     private List<Virement> virements;
-
-    @Override
-    public String toString() {
-        return "ComptePMB{" +
-                "id=" + id +
-                ", debits=" + debits +
-                ", credits=" + credits +
-                ", virements=" + virements +
-                '}';
-    }
 }

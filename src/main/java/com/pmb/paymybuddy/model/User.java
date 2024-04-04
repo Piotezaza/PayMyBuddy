@@ -38,16 +38,16 @@ public class User {
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "id")
-    private ComptePMB compte_pmb;
+    @JoinColumn(name = "id_compte_pmb", referencedColumnName = "id")
+    private ComptePMB comptePMB;
 
     @OneToOne(
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.EAGER
     )
-    @JoinColumn(name = "id")
-    private CompteBancaire compte_bancaire;
+    @JoinColumn(name = "id_compte_bancaire", referencedColumnName = "id")
+    private CompteBancaire compteBancaire;
 
     @ManyToMany(
             fetch = FetchType.EAGER,
@@ -63,19 +63,19 @@ public class User {
     )
     private List<User> contacts = new ArrayList<>();
 
-    // TODO faire une table ROLES
+    // TODO faire une table ROLES???
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", prenom='" + prenom + '\'' +
-                ", email='" + email + '\'' +
-                ", compte PMB nº" + compte_pmb.getId() +
-                ", compte bancaire: IBAN = " + (compte_bancaire == null ? "compte bancaire non défini" : compte_bancaire.getIban()) +
-                ", contacts=" + contacts +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "User{" +
+//                "id=" + id +
+//                ", prenom='" + prenom + '\'' +
+//                ", email='" + email + '\'' +
+//                ", compte PMB nº" + comptePMB.getId() +
+//                ", compte bancaire: IBAN = " + (compte_bancaire == null ? "compte bancaire non défini" : compte_bancaire.getIban()) +
+//                ", contacts=" + contacts +
+//                '}';
+//    }
 
     @Override
     public boolean equals(Object obj) {

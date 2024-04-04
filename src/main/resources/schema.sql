@@ -15,7 +15,9 @@ CREATE TABLE `Utilisateur`(
     `prenom` VARCHAR(255) NOT NULL,
     `nom` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `mot_de_passe` VARCHAR(255) NOT NULL
+    `mot_de_passe` VARCHAR(255) NOT NULL,
+    `id_compte_pmb` INT NOT NULL,
+    `id_compte_bancaire` INT NULL
 );
 
 CREATE TABLE `Contact`(
@@ -25,13 +27,11 @@ CREATE TABLE `Contact`(
 );
 
 CREATE TABLE `Compte_PMB`(
-    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY#,
-#     `id_utilisateur` INT NOT NULL
+    `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY
 );
 
 CREATE TABLE `Compte_bancaire`(
     `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-#     `id_utilisateur` INT NOT NULL,
     `iban` VARCHAR(255) NOT NULL
 );
 
@@ -57,8 +57,8 @@ CREATE TABLE `Virement`(
 ALTER TABLE `Utilisateur` ADD UNIQUE `utilisateur_email_unique`(`email`);
 ALTER TABLE `Contact` ADD CONSTRAINT `contact_contact_foreign` FOREIGN KEY(`contact`) REFERENCES `Utilisateur`(`id`);
 ALTER TABLE `Contact` ADD CONSTRAINT `contact_utilisateur_foreign` FOREIGN KEY(`user`) REFERENCES `Utilisateur`(`id`);
-# ALTER TABLE `Compte_PMB` ADD CONSTRAINT `compte_pmb_id_utilisateur_foreign` FOREIGN KEY(`id_utilisateur`) REFERENCES `Utilisateur`(`id`);
-# ALTER TABLE `Compte_bancaire` ADD CONSTRAINT `compte_bancaire_id_utilisateur_foreign` FOREIGN KEY(`id_utilisateur`) REFERENCES `Utilisateur`(`id`);
+ALTER TABLE `Utilisateur` ADD CONSTRAINT `utilisateur_compte_pmb_id_compte_pmb_foreign` FOREIGN KEY(`id_compte_pmb`) REFERENCES `Compte_PMB`(`id`);
+ALTER TABLE `Utilisateur` ADD CONSTRAINT `utilisateur_compte_bancaire_id_compte_bancaire_foreign` FOREIGN KEY(`id_compte_bancaire`) REFERENCES `Compte_bancaire`(`id`);
 ALTER TABLE `Compte_bancaire` ADD UNIQUE `compte_bancaire_iban_unique`(`iban`);
 ALTER TABLE `Transaction` ADD CONSTRAINT `transaction_compte_emetteur_foreign` FOREIGN KEY(`compte_emetteur`) REFERENCES `Compte_PMB`(`id`);
 ALTER TABLE `Transaction` ADD CONSTRAINT `transaction_compte_receveur_foreign` FOREIGN KEY(`compte_receveur`) REFERENCES `Compte_PMB`(`id`);

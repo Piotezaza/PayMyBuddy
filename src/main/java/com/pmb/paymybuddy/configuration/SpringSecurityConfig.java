@@ -43,6 +43,7 @@ public class SpringSecurityConfig {
                         .requestMatchers("/registration/**").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/home/**").hasRole("USER")
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(

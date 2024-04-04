@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class TestController {
+public class HomeController {
 
     @Autowired
     UserService userService;
 
     @GetMapping("/home")
-    public ModelAndView getTestData(Model model) {
+    public ModelAndView homeView(Model model) {
         ModelAndView mv = new ModelAndView();
 
         // TODO : adapter avec l'utilisateur connecté
