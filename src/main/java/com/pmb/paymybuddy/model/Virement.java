@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -28,7 +29,15 @@ public class Virement {
     private String type;
 
     @Column(name = "montant")
-    private double montant;
+    private BigDecimal montant;
+
+    @ManyToOne
+    @JoinColumn(name = "id_compte_pmb")
+    private ComptePMB comptePMB;
+
+    @ManyToOne
+    @JoinColumn(name = "id_compte_bancaire")
+    private CompteBancaire compteBancaire;
 
     @Override
     public String toString() {
@@ -37,6 +46,8 @@ public class Virement {
                 ", date=" + date +
                 ", type='" + type + '\'' +
                 ", montant=" + montant +
+                ", comptePMB=" + comptePMB +
+                ", compteBancaire=" + compteBancaire +
                 '}';
     }
 }

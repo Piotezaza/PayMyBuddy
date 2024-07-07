@@ -1,10 +1,7 @@
 package com.pmb.paymybuddy.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "Utilisateur")
 public class User {
@@ -30,7 +28,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(name = "mot_de_passe" , nullable = false)
+    @Column(name = "mot_de_passe", nullable = false)
     private String password;
 
     @OneToOne(
@@ -63,24 +61,9 @@ public class User {
     )
     private List<User> contacts = new ArrayList<>();
 
-    // TODO faire une table ROLES???
-
-//    @Override
-//    public String toString() {
-//        return "User{" +
-//                "id=" + id +
-//                ", prenom='" + prenom + '\'' +
-//                ", email='" + email + '\'' +
-//                ", compte PMB nº" + comptePMB.getId() +
-//                ", compte bancaire: IBAN = " + (compte_bancaire == null ? "compte bancaire non défini" : compte_bancaire.getIban()) +
-//                ", contacts=" + contacts +
-//                '}';
-//    }
-
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof User)) return false;
-        // TODO : remplacer prenom par email par la suite
-        return this.prenom.equals(((User) obj).prenom);
+        return this.email.equals(((User) obj).email);
     }
 }

@@ -3,6 +3,7 @@ package com.pmb.paymybuddy.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -35,11 +36,22 @@ public class ComptePMB {
     @JoinColumn(name = "compte_receveur")
     private List<Transaction> credits;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER
-    )
-    @JoinColumn(name = "id_compte_PMB")
+    @OneToMany(mappedBy = "comptePMB")
     private List<Virement> virements;
+
+    @OneToOne(mappedBy = "comptePMB", optional = false)
+    private User user;
+
+    public BigDecimal getBalance() {
+        BigDecimal balance = BigDecimal.ZERO;
+
+        BigDecimal totalDebits = debits.stream()
+                .map(transaction -> transaction.getMontant().add(transaction.getFrais()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal totalCredits = credits.stream()
+                .reduce(BigDecimal.ZERO, (subtotal, element) -> subtotal.add(element.getMontant()), BigDecimal::add);
+
+        return balance.add(totalCredits).subtract(totalDebits);
+    }
 }

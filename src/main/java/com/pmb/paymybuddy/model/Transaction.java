@@ -1,20 +1,19 @@
 package com.pmb.paymybuddy.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "Transaction")
-public class Transaction {
+public class Transaction implements Comparable<Transaction>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,15 +27,29 @@ public class Transaction {
     private String motif;
 
     @Column(name = "montant")
-    private double montant;
+    private BigDecimal montant;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "compte_emetteur", referencedColumnName = "id")
+    private ComptePMB issuer;
+
+    @ManyToOne(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER
+    )
+    @JoinColumn(name = "compte_receveur", referencedColumnName = "id")
+    private ComptePMB recipient;
+
+    @Column(name = "frais")
+    private BigDecimal frais;
 
     @Override
-    public String toString() {
-        return "Transaction{" +
-                "id=" + id +
-                ", date=" + date +
-                ", motif='" + motif + '\'' +
-                ", montant=" + montant +
-                '}';
+    public int compareTo(Transaction o) {
+        if (date == o.date) return 0;
+        if (date.isAfter(o.date)) return 1;
+        return -1;
     }
 }

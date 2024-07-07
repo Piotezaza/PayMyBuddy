@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -24,12 +25,7 @@ public class CompteBancaire {
     @Column(name = "iban")
     private String iban;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER // à la récupération du compte bancaire, tous les virements seront également récupérés
-    )
-    @JoinColumn(name = "id_compte_bancaire")
+    @OneToMany(mappedBy = "compteBancaire")
     private List<Virement> virements;
 
     @Override
@@ -39,5 +35,13 @@ public class CompteBancaire {
                 ", iban='" + iban + '\'' +
                 ", virements=" + virements +
                 '}';
+    }
+
+    public BigDecimal getBalance() {
+        BigDecimal balance = BigDecimal.ZERO;
+        for (Virement virement : virements) {
+            balance = virement.getType().equals("IN") ? balance.add(new BigDecimal(String.valueOf(virement.getMontant()))) : balance.subtract(new BigDecimal(String.valueOf(virement.getMontant())));
+        }
+        return balance;
     }
 }
