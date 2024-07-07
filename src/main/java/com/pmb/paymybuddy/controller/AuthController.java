@@ -3,8 +3,7 @@ package com.pmb.paymybuddy.controller;
 import com.pmb.paymybuddy.model.User;
 import com.pmb.paymybuddy.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -16,10 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 
+@Slf4j
 @Controller
 public class AuthController {
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
-
     private final UserService userService;
 
     public AuthController(UserService userService) {
@@ -27,12 +25,14 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String login() {
-        return "login";
+    public ModelAndView login() {
+        log.info("User is on the login page.");
+        return new ModelAndView("login");
     }
 
     @GetMapping("/registration")
     public String showRegistrationForm(WebRequest request, Model model) {
+        log.info("User is on the registration page.");
         User user = new User();
         model.addAttribute("user", user);
         return "registration";
@@ -40,8 +40,8 @@ public class AuthController {
 
     @PostMapping("/registration")
     public ModelAndView saveUser(@ModelAttribute("user") @Valid User user, HttpServletRequest request, Errors errors, Model model) {
-
         try {
+            log.info("User {} has created an account.", user.getEmail());
             userService.addUser(user);
         } catch (Exception exception) {
             model.addAttribute("message", exception.getMessage());
