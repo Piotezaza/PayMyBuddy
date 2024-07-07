@@ -1,39 +1,42 @@
 package com.pmb.paymybuddy.service;
 
+import com.pmb.paymybuddy.model.ComptePMB;
 import com.pmb.paymybuddy.model.Transaction;
 import com.pmb.paymybuddy.repository.TransactionRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class TransactionService {
     private final TransactionRepository transactionRepository;
 
-    public List<Transaction> getTransaction(){
+    private TaxeService taxeService;
+
+    @Autowired
+    public void setTaxeService(TaxeService taxeService) {
+        this.taxeService = taxeService;
+    }
+
+    public List<Transaction> getTransaction() {
         return transactionRepository.findAll();
     }
 
-    public Transaction getTransactionById(Integer id){
-        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
-        return optionalTransaction.orElse(null);
+    public Page<Transaction> getAllTransactionsForAccountPageable(ComptePMB comptePMB, Pageable pageable) {
+        return transactionRepository.findByIssuerOrRecipient(comptePMB, comptePMB, pageable);
     }
 
-    public Transaction addTransaction(Transaction transaction){
-        return saveTransaction(transaction);
+    public void addTransaction(Transaction transaction) {
+        transaction.setFrais(taxeService.addTaxe(transaction));
+        saveTransaction(transaction);
     }
 
-    public Transaction saveTransaction(Transaction transaction){
-        return transactionRepository.save(transaction);
-    }
-
-    public void deleteTransactionById(Integer id){
-        Optional<Transaction> optionalTransaction = transactionRepository.findById(id);
-        if (optionalTransaction.isPresent()){
-            transactionRepository.deleteById(id);
-        }
+    public void saveTransaction(Transaction transaction) {
+        transactionRepository.save(transaction);
     }
 }

@@ -1,8 +1,11 @@
 package com.pmb.paymybuddy.service;
 
+import com.pmb.paymybuddy.model.CompteBancaire;
 import com.pmb.paymybuddy.model.Virement;
 import com.pmb.paymybuddy.repository.VirementRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,14 @@ public class VirementService {
         return optionalVirement.orElse(null);
     }
 
+    public List<Virement> getVirementsSent(CompteBancaire compteBancaire) {
+        return virementRepository.findByTypeAndCompteBancaire("OUT", compteBancaire);
+    }
+
+    public List<Virement> getVirementsReceived(CompteBancaire compteBancaire) {
+        return virementRepository.findByTypeAndCompteBancaire("IN", compteBancaire);
+    }
+
     public Virement addVirement(Virement virement){
         return saveVirement(virement);
     }
@@ -35,5 +46,9 @@ public class VirementService {
         if (optionalVirement.isPresent()){
             virementRepository.deleteById(id);
         }
+    }
+
+    public Page<Virement> getAllVirementsForAccountPageable(CompteBancaire compteBancaire, Pageable pageable) {
+        return virementRepository.findByCompteBancaire(compteBancaire, pageable);
     }
 }

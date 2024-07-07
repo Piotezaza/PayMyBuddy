@@ -1,6 +1,7 @@
 package com.pmb.paymybuddy.service;
 
 import com.pmb.paymybuddy.model.Contact;
+import com.pmb.paymybuddy.model.User;
 import com.pmb.paymybuddy.repository.ContactRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,14 @@ public class ContactService {
     public Contact getContactById(Integer id){
         Optional<Contact> optionalContact = contactRepository.findById(id);
         return optionalContact.orElse(null);
+    }
+
+    public List<Contact> getContactsByUser(User user){
+        return contactRepository.findByUser(user);
+    }
+
+    public Contact findByUserAndContact(User user, User contact){
+        return contactRepository.findByUserAndContact(user, contact);
     }
 
     public Contact addContact(Contact contact){
