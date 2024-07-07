@@ -14,9 +14,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableWebSecurity
+@EnableTransactionManagement
 public class SpringSecurityConfig {
     private static final Logger logger = LoggerFactory.getLogger(SpringSecurityConfig.class);
 
@@ -60,11 +62,8 @@ public class SpringSecurityConfig {
                 .rememberMe(Customizer.withDefaults());
         return http.build();
     }
-    // TODO : regarder pour faire un remember me via la session
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

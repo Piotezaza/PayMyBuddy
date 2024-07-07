@@ -1,3 +1,36 @@
+# Projet 6 - PayMyBuddy
+
+> **Projet OpenClassrooms** : _Concevez une application web Java de A à Z_
+
+Le but de cette société est de créer une solution de paiement entre amis. L'idée est de permettre à des personnes qui se connaissent de s'envoyer de l'argent entre elles. Les utilisateurs de l'application PayMyBuddy peuvent échanger de l'argent avec leurs amis. Pour cela, ils peuvent créditer leur compte en ligne par carte bancaire ou par virement. Ils peuvent ensuite effectuer des opérations de transfert d'argent avec leurs amis. L'application prend une commission sur chaque transaction.
+
+## Objectifs
+
+- Concevoir l'architecture technique d'une application en utilisant des diagrammes UML.
+- Construire une application web Java en appliquant le pattern repository.
+- Implémenter un schéma de données dans une base de données relationnelle.
+- Réaliser une interface web simple en respectant des maquettes
+
+## Technologies utilisées
+- MySQL
+- Spring Security
+- Thymeleaf
+- Bootstrap
+- Spring Data JPA
+
+---
+## Ressources
+
+### Diagramme de classe UML
+![UML Class Diagram](files/uml.png)
+
+### Modèle conceptuel de données
+![Modèle conceptuel de données](files/mcd.png)
+
+### Script SQL
+*Le script est également disponible [ici](src/main/resources/schema.sql) au format `.sql`.*
+
+```MySQL
 # Désactivation la vérification des contraintes
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -84,3 +117,4 @@ ALTER TABLE `Virement`
 
 # Réactivation la vérification des contraintes
 SET FOREIGN_KEY_CHECKS = 1;
+```
